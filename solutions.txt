@@ -1,0 +1,3 @@
+https://stackoverflow.com/questions/17115632/microsoftodbc-driver-manager-data-source-name-not-found-and-no-default-drive
+
+https://knowledgebase.progress.com/articles/Article/3352?q=%22Data%20source%20name%20not%20found%20and%20no%20default%20driver%20specified%22&l=en_US&fs=Search&pn=1&utm_source=twitter&utm_medium=social&utm_campaign=support-kb&utm_term=alch&utm_content=jdbc&utm_source=stackoverflow&utm_medium=forum&utm_campaign=support-kb&utm_term=alch&utm_content=odbc
