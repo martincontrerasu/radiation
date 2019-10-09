@@ -1,3 +1,28 @@
-https://stackoverflow.com/questions/17115632/microsoftodbc-driver-manager-data-source-name-not-found-and-no-default-drive
+db = odbc.odbc('Driver={Microsoft Access Driver (*.mdb)};Dbq=Nwind.mdb;Uid=;Pwd=;')
 
-https://knowledgebase.progress.com/articles/Article/3352?q=%22Data%20source%20name%20not%20found%20and%20no%20default%20driver%20specified%22&l=en_US&fs=Search&pn=1&utm_source=twitter&utm_medium=social&utm_campaign=support-kb&utm_term=alch&utm_content=jdbc&utm_source=stackoverflow&utm_medium=forum&utm_campaign=support-kb&utm_term=alch&utm_content=odbc
+https://pypi.org/project/pandas_access/
+
+sources = pyodbc.dataSources()
+keys = sources.keys()
+for key in keys: 
+   print key
+   
+  
+https://stackoverflow.com/questions/5402463/how-do-i-access-a-mdb-file-from-python
+
+
+import pyodbc
+
+db_file = r'''/path/to/the/file.res'''
+user = 'admin'
+password = 'password'
+odbc_conn_str = 'DRIVER={Microsoft Access Driver (*.mdb)};DBQ=%s;UID=%s;PWD=%s' % (db_file, user, password)
+
+conn = pyodbc.connect(odbc_conn_str)
+
+cursor = conn.cursor()
+
+cursor.execute("select * from table order by some_column")
+
+for row in cursor.fetchall():
+    print ", ".join((row.column1, row.column2, row.columnN))
