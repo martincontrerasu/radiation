@@ -1,14 +1,8 @@
-db = odbc.odbc('Driver={Microsoft Access Driver (*.mdb)};Dbq=Nwind.mdb;Uid=;Pwd=;')
-
-https://pypi.org/project/pandas_access/
-
-sources = pyodbc.dataSources()
-keys = sources.keys()
-for key in keys: 
-   print key
-   
+IDData
+IDDataTypeSub1	 == "CALIBRATED"
+DateTime	
+Data
   
-https://stackoverflow.com/questions/5402463/how-do-i-access-a-mdb-file-from-python
 
 
 import pyodbc
