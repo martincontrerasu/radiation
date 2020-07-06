@@ -34,6 +34,9 @@ def connection():
 
 
 def radiator():
+    
+    test = connection()
+    data = pd.DataFrame([{"fecha":test[-1][0], "Data":test[-1][1]}])
     """selecciona los datos de la base de datos y retorna el espectro y su intensidad para la ultima medicion"""
 
 
