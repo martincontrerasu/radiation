@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import re
 import psycopg2 as psy
 import numpy as np
-from datetime import date
+from datetime import date, datetime
 import csv, pyodbc
 import odbc
 
