@@ -144,3 +144,22 @@ def maxradiation():
   fecha = str(data.fecha)
   fecha = fecha[4:20]
   insert_data2(fecha,radmax[0],radmean[0])
+              
+
+# This is the new form os storage!
+def querier(query):
+    #keys
+    user = 'admin_app'
+    password = '$aK58%&pa'
+    host = '200.126.102.51'
+    db = 'app'
+    driver = '{SQL Server}'
+
+    #connection
+    conn = pyodbc.connect('DRIVER='+driver+';SERVER='+host+';DATABASE='+db+';UID='+user+';PWD='+ password)
+    c = conn.cursor()
+    q = c.execute(query)
+    q = q.fetchall()
+    conn.commit()
+    conn.close()
+    return q
