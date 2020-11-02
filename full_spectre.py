@@ -16,6 +16,12 @@ from datetime import date, datetime
 import csv, pyodbc
 import odbc
 
+user = 'admin_app'
+password = '$aK58%&pa'
+host = '200.126.102.51'
+db = 'app'
+driver = '{SQL Server}'
+
 def connection():
 
   db_file = r'''C:\Users\Public\Documents\MSDA_XE\UserData\Databases\data.mdb'''
@@ -34,11 +40,11 @@ def connection():
 
 
 def radiator():
-    
-    test = connection()
-    data = pd.DataFrame([{"fecha":test[-1][0], "Data":test[-1][1]}])
     """selecciona los datos de la base de datos y retorna el espectro y su intensidad para la ultima medicion"""
 
+
+    test = connection()
+    data = pd.DataFrame([{"fecha":test[-1][0], "Data":test[-1][1]}])
 
     datos = data.iloc[-1].Data
 
@@ -52,6 +58,7 @@ def radiator():
 
 def insert_data(espectro,intensidad, fecha):
     conn = None
+    # Inserting postgreSQL data
     try:
         conn = psy.connect(host="salt.db.elephantsql.com",
                            user="aeaudjwo", password="5uHoUq62gU5BoS2HvJQH0ogSw_94nxCE")
@@ -60,12 +67,25 @@ def insert_data(espectro,intensidad, fecha):
 
         c.execute("""INSERT INTO espectro (
                     fecha,
-                    espectro,
+                    longitud_onda,
                     intensidad) VALUES (%s,%s,%s)""",(fecha,espectro,intensidad))
         conn.commit()
         conn.close()
 
     except (Exception, psy.DatabaseError) as error:
+        print (error)
+
+    # Inserting SQL server data
+    try:
+        conn = pyodbc.connect('DRIVER='+driver+';SERVER='+host+';DATABASE='+db+';UID='+user+';PWD='+ password)
+        c = conn.cursor()
+        c.execute("""INSERT INTO espectro (
+                    fecha,
+                    longitud_onda,
+                    intensidad) VALUES (?, ?, ?)""", fecha,espectro,intensidad)
+        conn.commit()
+        conn.close()
+    except Exception as error:
         print (error)
 
     finally:
@@ -74,6 +94,7 @@ def insert_data(espectro,intensidad, fecha):
 
 def del_data():
     conn = None
+    # delete from postgresql cloud server
     try:
         conn = psy.connect(host="salt.db.elephantsql.com",
                            user="aeaudjwo", password="5uHoUq62gU5BoS2HvJQH0ogSw_94nxCE")
@@ -84,7 +105,18 @@ def del_data():
         conn.commit()
         conn.close()
     except:
-        print("Ha ocurrido un error al intentar eliminar el espectro
+        print("[Error!] Ha ocurrido un error al intentar eliminar el espectro PostgreSQL cloud")
+
+    # delete from sql SERVER
+    try:
+        conn = pyodbc.connect('DRIVER='+driver+';SERVER='+host+';DATABASE='+db+';UID='+user+';PWD='+ password)
+        c = conn.cursor()
+        c.execute("DELETE FROM espectro")
+        conn.commit()
+        conn.close()
+    except:
+        print("[Error!] Ha ocurrido un error al intentar eliminar el espectro SQL Server")
+
 
 def insert_espectro():
     #borra espectros previos
@@ -92,7 +124,7 @@ def insert_espectro():
     #inserta los valores nuevos
     espectro, intensidad = radiator()
     fecha_ = datetime.now().strftime("%d-%m-%Y %H:%M")
-    for spc,inten in zip(espectro, intensidad):
+    for spc, inten in zip(espectro, intensidad):
         insert_data(spc,inten, fecha_)
 
 def radiator2(data):
@@ -144,22 +176,15 @@ def maxradiation():
   fecha = str(data.fecha)
   fecha = fecha[4:20]
   insert_data2(fecha,radmax[0],radmean[0])
-              
 
-# This is the new form os storage!
-def querier(query):
-    #keys
-    user = 'admin_app'
-    password = '$aK58%&pa'
-    host = '200.126.102.51'
-    db = 'app'
-    driver = '{SQL Server}'
+  user = 'admin_app'
+  password = '$aK58%&pa'
+  host = '200.126.102.51'
+  db = 'app'
+  driver = '{SQL Server}'
 
-    #connection
-    conn = pyodbc.connect('DRIVER='+driver+';SERVER='+host+';DATABASE='+db+';UID='+user+';PWD='+ password)
-    c = conn.cursor()
-    q = c.execute(query)
-    q = q.fetchall()
-    conn.commit()
-    conn.close()
-    return q
+  conn = pyodbc.connect('DRIVER='+driver+';SERVER='+host+';DATABASE='+db+';UID='+user+';PWD='+ password)
+  c = conn.cursor()
+  c.execute("""INSERT INTO radiometro(fecha, maxrad, meanrad) VALUES(?,?,?)""", fecha,radmax[0],radmean[0])
+  conn.commit()
+  conn.close()
